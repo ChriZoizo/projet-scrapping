@@ -1,23 +1,26 @@
 require 'nokogiri'
 require 'open-uri'
 require 'rubygems'
+require 'rest_client'
 
 @deputes_index = Array.new
 @deputes_name = Array.new
 @results = Hash.new
 
-def index_url 
+def index
+
     url = "http://www2.assemblee-nationale.fr/deputes/liste/alphabetique"
-   url_index = Nokogiri::HTML(URI.open(url))
+    html = RestClient.get(url)    
+   url_index = Nokogiri::HTML(html)
    list = url_index.xpath('//*[@id="deputes-list"]/div/ul/li/a').each {|deputes| @deputes_index << deputes['href'] }
     @deputes_index
-return list
+
 end
 
-def find_depute_mails(index_url)
+def find_depute_mails(index)
     list_mails = Array.new
    @deputes_index.each do |deputes|
-    depute_page = Nokogiri::HTML(URI.open("http://www2.assemblee-nationale.fr/#{deputes}"))
+    depute_page = Nokogiri::HTML(open("http://www2.assemblee-nationale.fr/#{deputes}"))
     depute_mail = depute_page.css('#haut-contenu-page > article > div.contenu-principal.en-direct-commission.clearfix > div > dl > dd:nth-child(8) > ul > li:nth-child(2) > a').text
     list_mails << depute_mail
 end
@@ -25,8 +28,10 @@ return list_mails
 end
 
 def depute_first_name
-    first_name = Array.new   
-   url_index = Nokogiri::HTML(open("http://www2.assemblee-nationale.fr/deputes/liste/alphabetique"))
+    first_name = Array.new
+    url = "http://www2.assemblee-nationale.fr/deputes/liste/alphabetique"
+    html = RestClient.get(url)    
+   url_index = Nokogiri::HTML(html)
    name = url_index.xpath('//*[@id="deputes-list"]/div/ul/li/a').each do |name|
     #hashfirstname = Hash.new
     firstname = name.text.gsub('M.', '').gsub('Mme', '').strip.split.first
@@ -38,8 +43,9 @@ end
 
 def depute_last_name
     last_name = Array.new
-    url = 
-    url_index = Nokogiri::HTML(open("http://www2.assemblee-nationale.fr/deputes/liste/alphabetique"))
+    url = "http://www2.assemblee-nationale.fr/deputes/liste/alphabetique"
+    html = RestClient.get(url)    
+    url_index = Nokogiri::HTML(html)
     name = url_index.xpath('//*[@id="deputes-list"]/div/ul/li/a').each do |name| 
         #hashlastname = Hash.new
         lastname = name.text.gsub('M.', '').gsub('Mme', '').strip.split(' ').drop(1).join(' ') 
@@ -49,7 +55,7 @@ def depute_last_name
 end
 
 def depute_scraper
-    mail = find_depute_mails(index_url)
+    mail = find_depute_mails(index)
     firstname = depute_first_name
     secondname = depute_last_name
 
