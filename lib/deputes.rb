@@ -16,7 +16,7 @@ end
 
 def find_depute_mails(index_url)
     list_mails = Array.new
-   @deputes_index.first(5).each do |deputes|
+   @deputes_index.each do |deputes|
     depute_page = Nokogiri::HTML(URI.open("http://www2.assemblee-nationale.fr/#{deputes}"))
     depute_mail = depute_page.css('#haut-contenu-page > article > div.contenu-principal.en-direct-commission.clearfix > div > dl > dd:nth-child(8) > ul > li:nth-child(2) > a').text
     list_mails << depute_mail
