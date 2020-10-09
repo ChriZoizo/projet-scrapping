@@ -33,7 +33,6 @@ def depute_first_name
     html = RestClient.get(url)    
     url_index = Nokogiri::HTML(html)
     name = url_index.xpath('//*[@id="deputes-list"]/div/ul/li/a').each do |name|
-    #hashfirstname = Hash.new
     firstname = name.text.gsub('M.', '').gsub('Mme', '').strip.split.first
     first_name << firstname
 
@@ -47,7 +46,6 @@ def depute_last_name
     html = RestClient.get(url)    
     url_index = Nokogiri::HTML(html)
     name = url_index.xpath('//*[@id="deputes-list"]/div/ul/li/a').each do |name| 
-        #hashlastname = Hash.new
         lastname = name.text.gsub('M.', '').gsub('Mme', '').strip.split(' ').drop(1).join(' ') 
         last_name << lastname
     end
