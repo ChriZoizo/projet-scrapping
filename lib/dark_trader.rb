@@ -14,8 +14,8 @@ cryptocurrencies = []
 #Page internet source
 page = Nokogiri::HTML(open("https://coinmarketcap.com/all/views/all/"))
 #Xpath : Chemin HTML
-cryptosource = page.xpath('//*[@id="__next"]/div[1]/div[2]/div[1]/div[2]/div/div[2]/div[3]/div/table/tbody/tr/td[3]/div')
-valuesource = page.xpath('//*[@id="__next"]/div[1]/div[2]/div[1]/div[2]/div/div[2]/div[3]/div/table/tbody/tr/td/a')
+cryptosource = page.xpath('//*[@id="__next"]/div[1]/div[2]/div[1]/div[2]/div/div[2]/div[3]/div/table/tbody/tr/td[3]/div') #rrecupere le symbole des crypto-monnaies
+valuesource = page.xpath('//*[@id="__next"]/div[1]/div[2]/div[1]/div[2]/div/div[2]/div[3]/div/table/tbody/tr/td/a') #recupere les valeurs des crypto
 
 # ajouts des noms des cryptos en tant que valeurs dans le array cryptoarray
 cryptosource.each do |cryptosource|
